@@ -1,1 +1,17 @@
+# Python dependencies for Medical Insurance Cost Prediction Project
+# CS-4120 Project - Louis Lee and Isaac Campbell
 
+# Core data science libraries
+pandas==2.0.3
+numpy==1.24.3
+scikit-learn==1.3.0
+
+# Visualization
+matplotlib==3.7.2
+seaborn==0.12.2
+
+# MLflow for experiment tracking
+mlflow==2.7.1
+
+# Additional utilities
+scipy==1.11.2

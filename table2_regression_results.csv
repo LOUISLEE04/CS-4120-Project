@@ -1,0 +1,3 @@
+Model,Val MAE,Val RMSE,Test MAE,Test RMSE
+Linear Regression,"$3,930.79","$5,519.68","$4,360.11","$6,090.49"
+Decision Tree,"$3,064.06","$6,339.12","$2,834.73","$6,056.83"
