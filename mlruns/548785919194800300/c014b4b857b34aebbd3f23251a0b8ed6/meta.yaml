@@ -1,0 +1,15 @@
+artifact_uri: /Users/rhlee/Documents/mlruns/548785919194800300/c014b4b857b34aebbd3f23251a0b8ed6/artifacts
+end_time: 1762131892304
+entry_point_name: ''
+experiment_id: '548785919194800300'
+lifecycle_stage: active
+run_id: c014b4b857b34aebbd3f23251a0b8ed6
+run_name: DecisionTree_depth10
+run_uuid: c014b4b857b34aebbd3f23251a0b8ed6
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1762131890705
+status: 3
+tags: []
+user_id: rhlee

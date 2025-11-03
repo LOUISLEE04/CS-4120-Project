@@ -1,0 +1,15 @@
+artifact_uri: /Users/rhlee/Documents/mlruns/779291650664799924/2998f45e327c4614a26633e70e7d286d/artifacts
+end_time: 1762130971562
+entry_point_name: ''
+experiment_id: '779291650664799924'
+lifecycle_stage: active
+run_id: 2998f45e327c4614a26633e70e7d286d
+run_name: LinearRegression_baseline
+run_uuid: 2998f45e327c4614a26633e70e7d286d
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1762130969374
+status: 3
+tags: []
+user_id: rhlee
