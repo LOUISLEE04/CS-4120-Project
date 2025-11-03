@@ -4,6 +4,13 @@ from sklearn.linear_model import LinearRegression
 from sklearn.model_selection import train_test_split
 from sklearn import metrics
 import matplotlib.pyplot as plt
+import mlflow
+import mlflow.sklearn
+from pathlib import Path
+
+mlruns_path = str(Path().resolve().parent / "mlruns")
+mlflow.set_tracking_uri(mlruns_path)
+mlflow.set_experiment("LinearRegression_Baseline")
 
 data = pd.read_csv('insurance.csv')
 
@@ -21,19 +28,36 @@ X = data_encoded[feature_cols]
 y = data_encoded['charges']
 
 X_train, X_test, y_train, y_test = train_test_split(X, y, random_state=42, test_size=0.3)
+with mlflow.start_run(run_name="LinearRegression_baseline"):
+    
+    mlflow.log_param("model_type", "LinearRegression")
+    mlflow.log_param("test_size", 0.3)
+    mlflow.log_param("random_state", 42)
+    
+    linreg = LinearRegression()
+    linreg.fit(X_train, y_train)
 
-linreg = LinearRegression()
-linreg.fit(X_train, y_train)
-
-y_pred = linreg.predict(X_test)
-
-residuals = y_test - y_pred
-plt.figure(figsize=(10, 6))
-plt.scatter(y_pred, residuals, alpha=0.6, edgecolor='k', linewidth=0.5)
-plt.axhline(y=0, color='r', linestyle='--', linewidth=2)
-plt.xlabel('Predicted Charges ($)')
-plt.ylabel('Residuals ($)')
-plt.title('Residuals vs Predicted Values - Linear Regression')
-plt.tight_layout()
-plt.savefig('plot4_residuals.png', dpi=300)
-plt.show()
+    y_pred = linreg.predict(X_test)
+    
+    mae = metrics.mean_absolute_error(y_test, y_pred)
+    rmse = np.sqrt(metrics.mean_squared_error(y_test, y_pred))
+    
+    mlflow.log_metric("test_mae", mae)
+    mlflow.log_metric("test_rmse", rmse)
+    
+    print(f"--- Linear Regression Results ---")
+    print(f"Test MAE:  ${mae:.2f}")
+    print(f"Test RMSE: ${rmse:.2f}")
+    
+    residuals = y_test - y_pred
+    plt.figure(figsize=(10, 6))
+    plt.scatter(y_pred, residuals, alpha=0.6, edgecolor='k', linewidth=0.5)
+    plt.axhline(y=0, color='r', linestyle='--', linewidth=2)
+    plt.xlabel('Predicted Charges ($)')
+    plt.ylabel('Residuals ($)')
+    plt.title('Residuals vs Predicted Values - Linear Regression')
+    plt.tight_layout()
+    plt.savefig('plot4_residuals.png', dpi=300)
+    mlflow.log_artifact('plot4_residuals.png')
+    plt.show()
+    print(f"\n✓ Results saved to MLflow at: {mlruns_path}")
