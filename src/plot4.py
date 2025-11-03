@@ -44,8 +44,9 @@ with mlflow.start_run(run_name="LinearRegression_baseline"):
     
     mlflow.log_metric("test_mae", mae)
     mlflow.log_metric("test_rmse", rmse)
+    mlflow.sklearn.log_model(linreg, "model")
     
-    print(f"--- Linear Regression Results ---")
+    print(f"Linear Regression Results:")
     print(f"Test MAE:  ${mae:.2f}")
     print(f"Test RMSE: ${rmse:.2f}")
     
