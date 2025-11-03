@@ -1,0 +1,10 @@
+artifact_location: file:///C:/Users/soupy/Documents/School/CS-4210/CS-4120-Project/src/mlruns/678935270121383938/models/m-de5ccbfb44f040f08e8f85da4525ca3f/artifacts
+creation_timestamp: 1762137614393
+experiment_id: '678935270121383938'
+last_updated_timestamp: 1762137618430
+model_id: m-de5ccbfb44f040f08e8f85da4525ca3f
+model_type: null
+name: model
+source_run_id: 1264e94c4dfd42d4848f6b540a789dbc
+status: 2
+status_message: null

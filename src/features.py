@@ -5,6 +5,7 @@ import numpy as np
 def add_highCharges(df: pandas.DataFrame) -> pandas.DataFrame:
     # add high charges classificaiton
     df['highCharges'] = df["charges"] > 20000
+    df.drop('charges', axis=1)
     return df
 
 def encode(data: pandas.DataFrame) -> pandas.DataFrame:
@@ -15,7 +16,6 @@ def encode(data: pandas.DataFrame) -> pandas.DataFrame:
     encoded.insert(3, "Smoker", data["smoker"]=="yes")
     for region in ["SW", "NW", "NE"]:
         encoded.insert(3, "region-"+region, data['region']==region)
-
     return encoded
 
 def upsample(X_train, y_train):

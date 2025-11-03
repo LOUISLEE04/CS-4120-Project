@@ -1,0 +1,22 @@
+artifact_path: file:///C:/Users/soupy/Documents/School/CS-4210/CS-4120-Project/src/mlruns/678935270121383938/models/m-2404505bb541489ea8d41ba7125bc445/artifacts
+flavors:
+  python_function:
+    env:
+      conda: conda.yaml
+      virtualenv: python_env.yaml
+    loader_module: mlflow.sklearn
+    model_path: model.pkl
+    predict_fn: predict
+    python_version: 3.13.7
+  sklearn:
+    code: null
+    pickled_model: model.pkl
+    serialization_format: cloudpickle
+    sklearn_version: 1.7.1
+mlflow_version: 3.5.1
+model_id: m-2404505bb541489ea8d41ba7125bc445
+model_size_bytes: 988
+model_uuid: m-2404505bb541489ea8d41ba7125bc445
+prompts: null
+run_id: c10d37d9283f4035babbe3adb53c9a16
+utc_time_created: '2025-11-03 02:44:23.050577'

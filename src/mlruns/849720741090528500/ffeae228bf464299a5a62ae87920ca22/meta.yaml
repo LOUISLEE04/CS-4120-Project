@@ -1,0 +1,14 @@
+artifact_uri: file:///C:/Users/soupy/Documents/School/CS-4210/CS-4120-Project/src/mlruns/849720741090528500/ffeae228bf464299a5a62ae87920ca22/artifacts
+end_time: 1762138367136
+entry_point_name: ''
+experiment_id: '849720741090528500'
+lifecycle_stage: active
+run_id: ffeae228bf464299a5a62ae87920ca22
+run_name: DecisionTree_maxDepth10_MinSplit2
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1762138367078
+status: 4
+tags: []
+user_id: Isaac

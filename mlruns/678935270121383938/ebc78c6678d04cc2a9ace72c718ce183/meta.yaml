@@ -1,0 +1,14 @@
+artifact_uri: file:///C:/Users/soupy/Documents/School/CS-4210/CS-4120-Project/src/mlruns/678935270121383938/ebc78c6678d04cc2a9ace72c718ce183/artifacts
+end_time: 1762137874447
+entry_point_name: ''
+experiment_id: '678935270121383938'
+lifecycle_stage: active
+run_id: ebc78c6678d04cc2a9ace72c718ce183
+run_name: GaussianNB_var1e-07_balanced
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1762137870690
+status: 3
+tags: []
+user_id: Isaac
