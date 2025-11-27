@@ -124,7 +124,7 @@ plt.savefig('learning_curves_classification.png', dpi=300, bbox_inches='tight')
 print("✓ Learning curves saved as 'learning_curves_classification.png'")
 plt.show()
 
-model.save('insurance_classification_model.h5')
+model.save('insurance_classification_model.keras')
 
 nn_is_better = (f1 > baseline_f1) or (roc_auc > baseline_roc_auc)
 if nn_is_better:
