@@ -1,14 +1,14 @@
 from data import load_data, clean_data, split_data
-import pandas
+import pandas as pd
 import numpy as np
 
-def add_highCharges(df: pandas.DataFrame) -> pandas.DataFrame:
+def add_highCharges(df: pd.DataFrame) -> pd.DataFrame:
     # add high charges classificaiton
     df['highCharges'] = df["charges"] > 20000
     df.drop('charges', axis=1)
     return df
 
-def encode(data: pandas.DataFrame) -> pandas.DataFrame:
+def encode(data: pd.DataFrame) -> pd.DataFrame:
     """Returns the input data frame with categorical variables converted to encodings"""
 
     encoded = data.select_dtypes(include=['int64', 'float64', 'bool'])

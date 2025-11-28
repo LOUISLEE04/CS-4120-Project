@@ -2,8 +2,12 @@ from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_sc
 import mlflow
 import mlflow.sklearn
 from sklearn.model_selection import train_test_split
+from sklearn.naive_bayes import GaussianNB
+from sklearn.model_selection import cross_val_score, StratifiedKFold
+import joblib
 
-from data import load_data, clean_data, split_data
+from data import load_clean_split
+from utils import get_filepath
 import features
 
 # ----- CLASSIFICATION BASELINES -----
@@ -18,10 +22,10 @@ def load_and_split_encode_classification_data():
 
 
 # --- Naive Bayes Baseline ---
-from sklearn.naive_bayes import GaussianNB
+
 
 def run_naive_bayes(var_smoothing, upsample: bool):
-    X_train, X_test, y_train, y_test = load_and_split_encode_classification_data()
+    X_train, X_test, y_train, y_test = load_clean_split(isClassification=True)
     mlflow.set_experiment("NaiveBayes_Baseline")
 
     if upsample:
@@ -30,43 +34,56 @@ def run_naive_bayes(var_smoothing, upsample: bool):
     else:
         balance="imbalanced"
 
-    with mlflow.start_run(run_name=f"GaussianNB_var{var_smoothing}_{balance}"):
+    with mlflow.start_run(run_name=f"GaussianNB_var{var_smoothing}_{balance}") as run:
 
         gnb = GaussianNB(var_smoothing=var_smoothing)
+
+        # Log params
         mlflow.log_param("model_type", "GaussianNB")
         mlflow.log_param("var_smoothing", var_smoothing)
         mlflow.log_param("upsampled", upsample)
-        # - Fit and Predict -
+
+        # ===== CV on training data =====
+        cv = StratifiedKFold(n_splits=5, shuffle=True, random_state=42)
+        cv_f1 = cross_val_score(gnb, X_train, y_train, cv=cv, scoring='f1')
+        cv_roc_auc = cross_val_score(gnb, X_train, y_train, cv=cv, scoring='roc_auc')
+
+        mlflow.log_metric("cv_f1_mean", cv_f1.mean())
+        mlflow.log_metric("cv_f1_std", cv_f1.std())
+        mlflow.log_metric("cv_roc_auc_mean", cv_roc_auc.mean())
+        mlflow.log_metric("cv_roc_auc_std", cv_roc_auc.std())
+
         gnb.fit(X_train, y_train)
-        y_pred = gnb.predict(X_test)
-        y_proba = gnb.predict_proba(X_test)[:,1]
 
-        # - Metrics -
-        f1 = f1_score(y_test, y_pred)
-        roc_auc = roc_auc_score(y_test, y_proba)
-
-        mlflow.log_metric("roc_auc", roc_auc)
+        # Save the model and run id
         mlflow.sklearn.log_model(gnb, name="model")
+        model_path = get_filepath("models", f"GNB_var{var_smoothing}_{balance}")
+        joblib.dump(gnb, path)
+        run_id = run.info.run_id
 
         print(f"--- GaussianNB_var{var_smoothing}_{balance} ---")
-        print(f"F1 Score: {f1:.3f}")
-        print(f"ROC AUC: {roc_auc:.6f}")
-        print(confusion_matrix(y_test, y_pred))
+        print(f"CV ROC-AUC: {cv_roc_auc.mean():.3f} ± {cv_roc_auc.std():.3f}")
+
+        return run_id, model_path, cv_roc_auc.mean()
+
 
 def tune_naive_bayes(var_smoothing: list):
-    for value in var_smoothing:
-        run_naive_bayes(value, False)
-        run_naive_bayes(value, True)
+    results = []
+    for var_smooth in var_smoothing:
+        for upsample in [False, True]:
+            run_id, path, cv_score = run_naive_bayes(var_smooth, upsample)
+            results.append({'run_id': run_id, 'path': path, 'cv_score': cv_score})
 
-tune_naive_bayes([1e-7])
+    best = max(results, key=lambda x: x['cv_score'])
+    print(f"Best model: {best['path']} with CV ROC-AUC: {best['cv_score']:.3f}")
+
+
+tune_naive_bayes([10e-12, 10e-10, 10e-8, 10e-7])
 
 
 # --- Decision Tree Classifier ---
 from sklearn.tree import DecisionTreeClassifier
-def load_and_split_classification_data():
-    classificationData = clean_data(load_data())
-    classificationData = features.add_highCharges(classificationData)
-    return split_data(classificationData, isClassification=True)
+
 def run_decision_tree(max_depth, min_samples_split):
     X_train, X_test, y_train, y_test = load_and_split_classification_data()
     mlflow.set_experiment("DecisionTrees_Baseline")
