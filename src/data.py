@@ -16,7 +16,7 @@ def clean_data(data: pd.DataFrame) -> pd.DataFrame:
                   }
     data['region'] = data['region'].replace(region_map)
 
-    # add high charges classificaiton
+    # add high charges classification
     data['highCharges'] = data["charges"] > 20000
     return data
 
@@ -28,7 +28,17 @@ def split_data(data: pd.DataFrame, isClassification: bool):
         targetCol = "charges"
     X = data.drop(["charges", "highCharges"], axis=1)
     y = data[targetCol]
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
+
+    if isClassification:
+        X_train, X_test, y_train, y_test = train_test_split(
+            X, y,
+            test_size=0.2, random_state=42,
+            stratify=y)
+    else:
+        X_train, X_test, y_train, y_test = train_test_split(
+            X, y,
+            test_size=0.2, random_state=42)
+
     return X_train, X_test, y_train, y_test
 
 
@@ -53,7 +63,6 @@ def _test():
     print(X_train.shape)
     print(X_test.shape)
     print(y_train.size)
-    print(X_train.head)
 
 
 if __name__ == "__main__":
